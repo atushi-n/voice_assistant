@@ -6,6 +6,8 @@ import speech_recognition as sr
 
 WAKEWORD = ["alexa"]  # ウェイクワードを指定
 
+count = 0
+
 porcupine = pvporcupine.create(keywords=WAKEWORD)
 
 wav_obj = simpleaudio.WaveObject.from_wave_file("main/sound.wav")
@@ -25,15 +27,8 @@ audio_stream = pa.open(
 )
 
 
-
-
-
-
-
 def branch_method(out_voice):
-
-
-        # "ストップ" と言ったら音声認識を止める
+    # "ストップ" と言ったら音声認識を止める
     if out_voice == "こんにちは":
         pass
         # vovox.generate_wav("こんにちは", speaker=0, filepath="./voice.wav")
@@ -42,8 +37,6 @@ def branch_method(out_voice):
 
     else:
         print("その処理は登録されていません")
-
-
 
 
 while True:
@@ -55,11 +48,8 @@ while True:
 
     if result >= 0:  # ウェイクワード検出時の処理
         wav_obj.play()  # 音を鳴らす
-        print("Wake Word!")
+        print("\nWake Word!")
         print("Say something ...")
-
-
-
 
         with mic as source:
             r.adjust_for_ambient_noise(source)  # 雑音対策
@@ -70,19 +60,23 @@ while True:
         try:
             out_voice = r.recognize_google(audio, language='ja-JP')
             print(f'voice={out_voice}')
+            branch_method(out_voice)
 
 
-
-        # 以下は認識できなかったときに止まらないように。
+        #認識できなかったとき
         except sr.UnknownValueError:
             print("could not understand audio")
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
-
-
-
     else:
-        print("?")
+
+        if(count == 30):
+            count = 0
+            print("?")
+        else:
+            print("?", end="")
+            count += 1
+
 
 
