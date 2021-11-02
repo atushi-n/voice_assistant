@@ -37,4 +37,4 @@ def generate_wav(text, speaker=1, filepath='./audio.wav'):
 
 
 text = 'こんにちは！'
-generate_wav(text, speaker=0, filepath="./voice.wav")
+generate_wav(text, speaker=0, filepath="../main/voice.wav")
